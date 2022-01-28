@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gw
+  namespace: center
+  labels:
+    app: gw
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gw
+  template:
+    metadata:
+      labels:
+        app: gw
+    spec:
+      containers:
+        - name: app
+          image: sparktype/gw:1.0.0
+          ports:
+            - containerPort: 7070
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gw
+  namespace: center
+  labels:
+    app: eureka
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 7070
+  selector:
+    app: gw

@@ -1,0 +1,9 @@
+auth:
+  database: customer
+  username: developer
+  password: pass1234
+  rootPassword: pass1234
+primary:
+  persistence:
+    enabled: true
+    size: 100Mi

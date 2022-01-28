@@ -1,0 +1,37 @@
+server:
+  port: 8010
+spring:
+  application:
+    name: customer
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDB10Dialect
+    properties:
+      hibernate.hbm2ddl.auto: update
+      hibernate.show_sql: true
+      hibernate.format_sql: true
+    generate-ddl: true
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://127.0.0.1:13306/customer?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: developer
+    password: pass1234
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+---
+spring:
+  config:
+    activate:
+      on-profile: ide
+  cloud:
+    config:
+      enabled: false
+datasource:
+  url: jdbc:mariadb://127.0.0.1:13306/customer?useUnicode=true&characterEncoding=utf8&useSSL=false
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

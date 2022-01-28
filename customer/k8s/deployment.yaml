@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer
+  namespace: customer
+  labels:
+    app: customer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: customer
+  template:
+    metadata:
+      labels:
+        app: customer
+    spec:
+      containers:
+        - name: app
+          image: sparktype/customer:1.0.5
+          ports:
+            - containerPort: 8010
+          env:
+            - name: spring.profiles.active
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: env
+            - name: spring.config.import
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: config-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer
+  namespace: customer
+  labels:
+    app: customer
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8010
+      targetPort: 8010
+  selector:
+    app: customer

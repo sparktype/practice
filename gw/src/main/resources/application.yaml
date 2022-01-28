@@ -1,0 +1,13 @@
+server:
+  port: 7070
+spring:
+  application:
+    name: gw
+  cloud:
+    gateway:
+      routes:
+        - id: customer
+          predicates:
+            - Path=/api/customer/**
+          uri: http://customer.customer.svc.cluster.local:8010
+
